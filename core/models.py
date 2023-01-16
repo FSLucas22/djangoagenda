@@ -13,6 +13,8 @@ class Evento(models.Model):
     data_criacao = models.DateTimeField(auto_now=True, verbose_name='Data de Criação')
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    objects = models.Manager()
+
     # Para que o nome da tabela seja "evento" e não "core_evento":
     # class Meta:
     #   db_table = "evento"
