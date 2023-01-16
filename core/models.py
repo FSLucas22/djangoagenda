@@ -13,7 +13,7 @@ class Evento(models.Model):
     data_criacao = models.DateTimeField(auto_now=True, verbose_name='Data de Criação')
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    objects = models.Manager()
+    # objects = models.Manager()
 
     # Para que o nome da tabela seja "evento" e não "core_evento":
     # class Meta:
@@ -21,3 +21,6 @@ class Evento(models.Model):
 
     def __str__(self) -> models.CharField:
         return self.titulo
+
+    def get_data_evento(self):
+        return self.data_evento.strftime('%d/%m/%Y %Hh%Mmin')

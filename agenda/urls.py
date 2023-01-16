@@ -15,9 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import RedirectView
 from core import views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('evento/<titulo_evento>/', views.get_local)
+    path('evento/<titulo_evento>/', views.get_local),
+    path('agenda/', views.lista_eventos),
+    path('', RedirectView.as_view(url='/agenda/'))
 ]
