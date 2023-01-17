@@ -61,12 +61,14 @@ def submit_evento(request) -> HttpResponse:
 
     titulo = request.POST.get('titulo')
     data_evento = request.POST.get('data')
+    local_evento = request.POST.get('local')
     descricao = request.POST.get('descricao')
     usuario = request.user
     models.Evento.objects.create(
         titulo=titulo,
         descricao=descricao,
         data_evento=data_evento,
+        local=local_evento,
         usuario=usuario
     )
     return redirect('/')
