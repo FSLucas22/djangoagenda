@@ -22,7 +22,6 @@ def logout_user(request) -> HttpResponse:
 
 
 def submit_login(request) -> HttpResponse:
-    # Se o tipo do request não for POST, retorna para a página anterior
     if not request.POST:
         return redirect('/')
 
@@ -37,8 +36,6 @@ def submit_login(request) -> HttpResponse:
     return redirect('/')
 
 
-
-
 def get_local(request, titulo_evento: str) -> HttpResponse:
     evento = models.Evento.objects.get(titulo=titulo_evento)
     return HttpResponse(evento.local)
@@ -50,3 +47,26 @@ def lista_eventos(request) -> HttpResponse:
     eventos = models.Evento.objects.filter(usuario=usuario)
     dados = {'eventos': eventos}
     return render(request, 'agenda.html', dados)
+
+
+@login_required(login_url="/login/")
+def evento(request) -> HttpResponse:
+    return render(request, 'evento.html')
+
+
+@login_required(login_url="/login/")
+def submit_evento(request) -> HttpResponse:
+    if not request.POST:
+        return redirect('/')
+
+    titulo = request.POST.get('titulo')
+    data_evento = request.POST.get('data')
+    descricao = request.POST.get('descricao')
+    usuario = request.user
+    models.Evento.objects.create(
+        titulo=titulo,
+        descricao=descricao,
+        data_evento=data_evento,
+        usuario=usuario
+    )
+    return redirect('/')
