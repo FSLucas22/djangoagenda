@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 from . import models
 
 # Create your views here.
@@ -10,6 +11,9 @@ from . import models
 
 # def index(request) -> HttpResponse:
 #     return redirect('/agenda/')
+
+
+requires_login = login_required(login_url="/login/")
 
 
 def login_user(request) -> HttpResponse:
@@ -41,7 +45,7 @@ def get_local(request, titulo_evento: str) -> HttpResponse:
     return HttpResponse(evento.local)
 
 
-@login_required(login_url="/login/")
+@requires_login
 def lista_eventos(request) -> HttpResponse:
     usuario = request.user
     eventos = models.Evento.objects.filter(usuario=usuario)
@@ -49,26 +53,55 @@ def lista_eventos(request) -> HttpResponse:
     return render(request, 'agenda.html', dados)
 
 
-@login_required(login_url="/login/")
+@requires_login
 def evento(request) -> HttpResponse:
-    return render(request, 'evento.html')
+    id_evento = request.GET.get('id')
+    dados = {}
+    if id_evento:
+        evento = models.Evento.objects.get(id=id_evento)
+        if evento.usuario == request.user:
+            dados['evento'] = models.Evento.objects.get(id=id_evento)
+    return render(request, 'evento.html', dados)
 
 
-@login_required(login_url="/login/")
+@requires_login
 def submit_evento(request) -> HttpResponse:
     if not request.POST:
         return redirect('/')
 
+    evento_id = request.POST.get('id')
     titulo = request.POST.get('titulo')
     data_evento = request.POST.get('data')
     local_evento = request.POST.get('local')
     descricao = request.POST.get('descricao')
     usuario = request.user
-    models.Evento.objects.create(
-        titulo=titulo,
-        descricao=descricao,
-        data_evento=data_evento,
-        local=local_evento,
-        usuario=usuario
-    )
+    if not evento_id:
+        models.Evento.objects.create(
+            titulo=titulo,
+            descricao=descricao,
+            data_evento=data_evento,
+            local=local_evento,
+            usuario=usuario
+        )
+    else:
+        evento = models.Evento.objects.get(id=evento_id)
+        if evento.usuario != usuario:
+            return redirect('/')
+        evento.titulo = titulo
+        evento.descricao = descricao,
+        evento.data_evento = data_evento,
+        evento.local = local_evento
+        evento.save()
+    return redirect('/')
+
+
+@requires_login
+def delete_evento(request, id_evento: int) -> HttpResponse:
+    usuario = request.user
+    try:
+        evento = models.Evento.objects.get(id=id_evento)
+        if evento.usuario == usuario:
+            evento.delete()
+    except ObjectDoesNotExist as e:
+        pass
     return redirect('/')
