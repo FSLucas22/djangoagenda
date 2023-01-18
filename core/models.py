@@ -37,6 +37,5 @@ class Evento(models.Model):
         data_atual = datetime.now()
         delta = self.data_evento - data_atual
         minutes = delta.total_seconds() / 60
-        print(minutes)
         return minutes
 

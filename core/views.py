@@ -45,8 +45,14 @@ def submit_login(request) -> HttpResponse:
 
 
 def get_local(request, titulo_evento: str) -> HttpResponse:
-    evento = models.Evento.objects.get(titulo=titulo_evento)
-    return HttpResponse(evento.local)
+    usuario = request.user
+    try:
+        evento = models.Evento.objects.get(titulo=titulo_evento)
+        if evento.usuario != usuario:
+            raise Http404()
+        return HttpResponse(evento.local)
+    except ObjectDoesNotExist:
+        raise Http404()
 
 
 @requires_login
@@ -63,9 +69,13 @@ def evento(request) -> HttpResponse:
     id_evento = request.GET.get('id')
     dados = {}
     if id_evento:
-        evento = models.Evento.objects.get(id=id_evento)
-        if evento.usuario == request.user:
-            dados['evento'] = models.Evento.objects.get(id=id_evento)
+        try:
+            evento = models.Evento.objects.get(id=id_evento)
+        except ObjectDoesNotExist:
+            raise Http404()
+        if evento.usuario != request.user:
+            raise Http404()
+        dados['evento'] = models.Evento.objects.get(id=id_evento)
     return render(request, 'evento.html', dados)
 
 
@@ -89,9 +99,12 @@ def submit_evento(request) -> HttpResponse:
             usuario=usuario
         )
     else:
-        evento = models.Evento.objects.get(id=evento_id)
-        if evento.usuario != usuario:
-            return redirect('/')
+        try:
+            evento = models.Evento.objects.get(id=evento_id)
+            if evento.usuario != usuario:
+                raise Http404()
+        except ObjectDoesNotExist:
+            raise Http404()
         evento.titulo = titulo
         evento.descricao = descricao
         evento.data_evento = data_evento
@@ -109,7 +122,7 @@ def delete_evento(request, id_evento: int) -> HttpResponse:
             raise Http404()
         evento.delete()
         return redirect('/')
-    except ObjectDoesNotExist as e:
+    except ObjectDoesNotExist:
         raise Http404()
 
 
