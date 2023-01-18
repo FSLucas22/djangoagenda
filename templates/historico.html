@@ -1,0 +1,17 @@
+{% extends "model_page.html" %}
+
+{% block content %}
+    <h2>Eventos Passados</h2>
+    <a href="/">
+        <button type="button">Eventos atuais</button>
+    </a>
+    <ul style="font-size: 15px">
+        {% for evento in eventos %}
+            <li>
+                {{ evento.titulo }} - {{ evento.get_data_evento }}
+                ( <a href="/agenda/evento/?id={{ evento.id }}">editar</a> /
+                <a href="/agenda/evento/delete/{{ evento.id }}/">excluir</a> )
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -127,6 +127,15 @@ def delete_evento(request, id_evento: int) -> HttpResponse:
 
 
 @requires_login
+def historico_eventos(request) -> HttpResponse:
+    usuario = request.user
+    data_atual = datetime.now()
+    eventos = models.Evento.objects.filter(usuario=usuario, data_evento__lt=data_atual)
+    dados = {'eventos': eventos}
+    return render(request, 'historico.html', dados)
+
+
+@requires_login
 def json_lista_eventos(request, id_usuario: int) -> HttpResponse:
     usuario = User.objects.get(id=id_usuario)
     data_atual = datetime.now() - timedelta(hours=24)
