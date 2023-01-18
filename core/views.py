@@ -1,9 +1,13 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
+from django.http.response import Http404, JsonResponse
+from datetime import datetime, timedelta
+
 from . import models
 
 # Create your views here.
@@ -48,7 +52,8 @@ def get_local(request, titulo_evento: str) -> HttpResponse:
 @requires_login
 def lista_eventos(request) -> HttpResponse:
     usuario = request.user
-    eventos = models.Evento.objects.filter(usuario=usuario)
+    data_atual = datetime.now() - timedelta(hours=24)
+    eventos = models.Evento.objects.filter(usuario=usuario, data_evento__gte=data_atual)
     dados = {'eventos': eventos}
     return render(request, 'agenda.html', dados)
 
@@ -88,8 +93,8 @@ def submit_evento(request) -> HttpResponse:
         if evento.usuario != usuario:
             return redirect('/')
         evento.titulo = titulo
-        evento.descricao = descricao,
-        evento.data_evento = data_evento,
+        evento.descricao = descricao
+        evento.data_evento = data_evento
         evento.local = local_evento
         evento.save()
     return redirect('/')
@@ -100,8 +105,17 @@ def delete_evento(request, id_evento: int) -> HttpResponse:
     usuario = request.user
     try:
         evento = models.Evento.objects.get(id=id_evento)
-        if evento.usuario == usuario:
-            evento.delete()
+        if evento.usuario != usuario:
+            raise Http404()
+        evento.delete()
+        return redirect('/')
     except ObjectDoesNotExist as e:
-        pass
-    return redirect('/')
+        raise Http404()
+
+
+@requires_login
+def json_lista_eventos(request, id_usuario: int) -> HttpResponse:
+    usuario = User.objects.get(id=id_usuario)
+    data_atual = datetime.now() - timedelta(hours=24)
+    eventos = models.Evento.objects.filter(usuario=usuario).values('id', 'titulo')
+    return JsonResponse(list(eventos), safe=False)
