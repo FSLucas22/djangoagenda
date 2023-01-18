@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from datetime import datetime
+from datetime import datetime, timedelta
 # Create your models here.
 
 
@@ -23,12 +23,20 @@ class Evento(models.Model):
     def __str__(self) -> models.CharField:
         return self.titulo
 
-    def get_data_evento(self):
+    def get_data_evento(self) -> str:
         return self.data_evento.strftime('%d/%m/%Y %Hh%Mmin')
 
-    def get_data_evento_input(self):
+    def get_data_evento_input(self) -> str:
         return self.data_evento.strftime('%Y-%m-%dT%H:%M')
 
-    def get_evento_atrasado(self):
+    def get_evento_atrasado(self) -> bool:
         data_atual = datetime.now()
         return self.data_evento < data_atual
+
+    def get_minutes_to_evento(self) -> float:
+        data_atual = datetime.now()
+        delta = self.data_evento - data_atual
+        minutes = delta.total_seconds() / 60
+        print(minutes)
+        return minutes
+
