@@ -34,7 +34,10 @@ def submit_login(request) -> HttpResponse:
         return redirect('/')
 
     username = request.POST.get('username')
+    print(username)
     password = request.POST.get('password')
+    print(request.POST.get)
+    print(password)
     usuario = authenticate(username=username, password=password)
     if not usuario:
         messages.error(request, "Usuário ou senha inválido!")
@@ -55,13 +58,19 @@ def get_local(request, titulo_evento: str) -> HttpResponse:
         raise Http404()
 
 
+
+@requires_login
+def index(request) -> HttpResponse:
+    return render(request, 'index.html')
+
+
 @requires_login
 def lista_eventos(request) -> HttpResponse:
     usuario = request.user
     data_atual = datetime.now() - timedelta(hours=24)
     eventos = models.Evento.objects.filter(usuario=usuario, data_evento__gte=data_atual)
     dados = {'eventos': eventos}
-    return render(request, 'agenda.html', dados)
+    return render(request, 'lista.html', dados)
 
 
 @requires_login
@@ -89,6 +98,7 @@ def submit_evento(request) -> HttpResponse:
     data_evento = request.POST.get('data')
     local_evento = request.POST.get('local')
     descricao = request.POST.get('descricao')
+
     usuario = request.user
     if not evento_id:
         models.Evento.objects.create(
@@ -138,6 +148,5 @@ def historico_eventos(request) -> HttpResponse:
 @requires_login
 def json_lista_eventos(request, id_usuario: int) -> HttpResponse:
     usuario = User.objects.get(id=id_usuario)
-    data_atual = datetime.now() - timedelta(hours=24)
     eventos = models.Evento.objects.filter(usuario=usuario).values('id', 'titulo')
     return JsonResponse(list(eventos), safe=False)

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+        {% block title %}Agenda{% endblock %}
+    </title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{% static 'agenda/img/favicon.png' %}" type="image/png">
+
+    <link rel="stylesheet" href="{% static 'agenda/css/main.css' %}" type="text/css">
+
+    {% block styles %}{% endblock %}
+</head>
+<body>
+
+<div class="container">
+    <div class="left-lateral container bg-dark"><div class="col"></div></div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{% url 'index' %}">
+                    <img src="{% static 'agenda/img/favicon.png' %}" height='32px'>
+                </a>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-item nav-link" href="{% url 'evento' %}">Novo evento</a></li>
+                    <li class="nav-item"><a class="nav-item nav-link" href="{% url 'lista_eventos' %}">Agenda</a></li>
+                </ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-md-0">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Sair</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <br><br>
+    <!-- Conteúdo -->
+    {% block content %} {% endblock %}
+    <br><br>
+    <!-- Footer -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <p> Desenvolvido por Lucas Ferreira </p>
+    <div class="right-lateral container bg-dark"><div class="col"></div></div>
+</div>
+</body>
+</html>

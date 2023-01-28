@@ -1,0 +1,78 @@
+{% extends "_layouts/model_page.html" %}
+
+{% block title %}Agenda{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Lista de Eventos</h5>
+
+          {% if eventos|length > 0 %}
+            <p class="card-text">
+              Aqui está a lista de <code>Eventos</code> cadastrados.
+            </p>
+
+            <table class="table">
+              <thead class="thead-dark">
+              <tr>
+                <th>Título</th>
+                <th>Descrição</th>
+                <th>Data e hora</th>
+                <th>Local</th>
+                <th>Ações</th>
+              </tr>
+              </thead>
+
+              <tbody>
+              {% for evento in eventos %}
+                <tr>
+                  <td>{{ evento.titulo }}</td>
+                  <td>
+                      {% if evento.descricao is not None %}
+                          {{ evento.descricao }}
+                      {% endif%}
+                  </td>
+                  <td>
+                      {% if evento.data_evento is not None %}
+                          {{ evento.data_evento }}
+                      {% endif %}
+                  </td>
+                  <td>
+                      {% if evento.local is not None %}
+                          {{ evento.local }}
+                      {% endif %}
+                  </td>
+                  <td>
+                    <a href="evento/?id={{ evento.id }}"
+                       class="btn btn-info">
+                      Editar
+                    </a>
+                    <a href="evento/delete/{{ evento.id }}/"
+                      class="btn btn-outline-danger">
+                        Excluir
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+        {% else %}
+          <div class="text-center mt-5 mb-5 jumbotron">
+            <h5>Nenhum <code>Evento</code> cadastrado ainda.</h5>
+          </div>
+        {% endif %}
+          <hr />
+          <div class="text-right">
+            <a href="{% url 'evento' %}" class="btn btn-primary">
+              Novo Evento
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

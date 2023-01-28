@@ -1,0 +1,54 @@
+{% extends "_layouts/model_page.html" %}
+
+{% block content %}
+{% for message in messages %}
+    <div style="color: red;">
+        <strong>Erro:&nbsp</strong>{{ message }}
+    </div>
+{% endfor %}
+<br>
+<div class="col-sm-5">
+    <form action="submit" method="POST">{% csrf_token %}
+        <div class="mb-3 form-group row d-flex "></div>
+        <div class="mb-3 form-group row d-flex ">
+            <h3>Dados do Evento</h3>
+        </div>
+        <input type="number" name="id" value="{{ evento.id }}" hidden>
+        <div class="mb-3 form-group row">
+            <div class="form-floating">
+                <input required type="text" class="form-control" name="titulo" id="titulo" size="18"
+                       placeholder="Titulo" value="{{ evento.titulo }}">
+                <label for="titulo" class="col-form-label">Titulo</label>
+            </div>
+        </div>
+        <div class="mb-3 form-group row">
+            <div class="form-floating">
+                <input required type="datetime-local" class="form-control" name="data" id="data" size="18"
+                       placeholder="Data do evento" value="{{ evento.get_data_evento_input }}">
+                <label for="data" class="col-form-label">Data do evento</label>
+            </div>
+        </div>
+        <div class="mb-3 form-group row">
+            <div class="form-floating">
+                <input type="text" class="form-control" name="local" id="local" size="18" placeholder="Local"
+                       {% if evento.local is not None %}
+                            value="{{ evento.local }}"
+                       {% endif %}
+                >
+                <label for="local" class="col-form-label">Local</label>
+            </div>
+        </div>
+        <div class="mb-3 form-group">
+                <textarea name="descricao" id="descricao" class="form-control"
+                       placeholder="Descrição do evento" rows="5" cols="18">{{ evento.descricao }}</textarea>
+        </div>
+        <div class="form-group mb-3">
+            <button type="submit" class="col-sm-2 btn btn-primary float-end">Salvar</button>
+            <a href="/">
+                <button style="margin-right: 10px" type="button"
+                        class="btn btn-secondary float-end">Cancelar</button>
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

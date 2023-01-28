@@ -1,0 +1,36 @@
+{% extends '_layouts/model_page.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<form action="submit" method="POST">{% csrf_token %}
+    <div class="mb-3 form-group row d-flex "></div>
+    <div class="mb-3 form-group row d-flex ">
+        <h3>Login</h3>
+        <p> Digite seu nome de usuário e senha </p>
+    </div>
+    <div class="mb-3 form-group row">
+        <div class="col-sm-5 form-floating">
+            <input required type="text" class="form-control" name="username"
+                   id="username" placeholder="Nome de usuário">
+            <label for="username" class="col-sm-2 col-form-label">Nome de usuário</label>
+        </div>
+    </div>
+    <div class="mb-3 form-group row">
+        <div class="col-sm-5  form-floating">
+            <input required
+                   type="password" class="form-control" id="password" name="password" placeholder="Senha">
+            <label for="password" class="col-sm-2 col-form-label">Senha</label>
+        </div>
+    </div>
+    <div class="mb-3 form-group row">
+        <div class="col-sm-5">
+            <button type="submit" class="btn btn-primary">Entrar</button>
+        </div>
+    </div>
+</form>
+<br>
+{% for message in messages %}
+    <div style="color: red;">
+        <strong>Erro:&nbsp</strong>{{ message }}
+    </div>
+{% endfor %}
+{% endblock %}
