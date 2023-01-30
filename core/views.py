@@ -13,6 +13,7 @@ from django.http.response import Http404, JsonResponse
 from django.shortcuts import render, redirect
 
 from . import models
+from .app_forms import UserRegistrationForm
 
 from .app_validation import validate_username
 from .decorators import user_not_authenticated
@@ -162,36 +163,15 @@ def cadastro_usuario(request) -> HttpResponse:
 def submit_usuario(request) -> HttpResponse:
     if not request.POST:
         return redirect('/')
-    try:
-        nome = request.POST.get('nome')
-        senha = request.POST.get('senha')
-        email = request.POST.get('email')
 
-        validate_username(nome)
-        validate_email(email)
-        validate_password(senha, nome)
-
-        if User.objects.filter(username=nome).exists():
-            messages.error(request, "O nome de usuário já existe."
-            " Caso já possua uma conta, tente <a href='/login'>fazer login</a>."
-            )
-            return redirect('/cadastro')
-
-        if User.objects.filter(email=email).exists():
-            messages.error(request, "Este email já está cadastrado. "
-                                    " Caso já possua uma conta, tente <a href='/login'>fazer login</a>.")
-            return redirect('/cadastro')
-
-        User.objects.create_user(nome, email, senha)
+    form = UserRegistrationForm(request.POST)
+    if form.is_valid():
+        usuario = form.save()
+        login(request, usuario)
         messages.success(request, "Usuário cadastrado com sucesso!")
-        return redirect('/cadastro')
+        return redirect('/')
 
-    except IntegrityError as e:
-        print(e)
-        messages.error(request, "Algo deu errado. Por favor tente novamente.")
-        return redirect('/cadastro')
-
-    except ValidationError as e:
-        for message in e.messages:
-            messages.error(request, message)
+    else:
+        for error in list(form.errors.values()):
+            messages.error(request, error)
         return redirect('/cadastro')

@@ -2,7 +2,6 @@
 {% block content %}
 <br>
 <form class="col-sm-5" action="submit" method="POST">{% csrf_token %}
-    <!-- @TODO modificar os campos para conter nome de usuário, email e senha -->
     <div class="mb-3 form-group row d-flex "></div>
     <div class="mb-3 form-group row d-flex ">
         <h3>Cadastro</h3>
@@ -11,9 +10,9 @@
     </div>
     <div class="mb-3 form-group row">
         <div class="form-floating">
-            <input required type="text" class="form-control" name="nome"
-                   id="nome" placeholder="Nome de usuário">
-            <label for="nome" class="col-sm-2 col-form-label">Nome de usuário</label>
+            <input required type="text" class="form-control" name="username"
+                   id="username" placeholder="Nome de usuário">
+            <label for="username" class="col-sm-2 col-form-label">Nome de usuário</label>
         </div>
     </div>
     <div class="mb-3 form-group row">
@@ -26,8 +25,16 @@
     <div class="mb-3 form-group row">
         <div class="form-floating">
             <input required
-                   type="password" class="form-control" id="senha" name="senha" placeholder="Senha">
-            <label for="senha" class="col-sm-2 col-form-label">Senha</label>
+                   type="password" class="form-control" id="password1" name="password1" placeholder="Senha">
+            <label for="password1" class="col-sm-2 col-form-label">Senha</label>
+        </div>
+    </div>
+        <div class="mb-3 form-group row">
+        <div class="form-floating">
+            <input required
+                   type="password" class="form-control" id="password2" name="password2"
+                   placeholder="Confirmar senha">
+            <label for="password2" class="col-sm-2 col-form-label">Confirmar senha</label>
         </div>
     </div>
     <div class="mb-3 form-group">
