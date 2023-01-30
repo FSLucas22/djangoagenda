@@ -58,7 +58,6 @@ def get_local(request, titulo_evento: str) -> HttpResponse:
         raise Http404()
 
 
-
 @requires_login
 def index(request) -> HttpResponse:
     return render(request, 'index.html')
@@ -150,3 +149,22 @@ def json_lista_eventos(request, id_usuario: int) -> HttpResponse:
     usuario = User.objects.get(id=id_usuario)
     eventos = models.Evento.objects.filter(usuario=usuario).values('id', 'titulo')
     return JsonResponse(list(eventos), safe=False)
+
+
+def cadastro_usuario(request) -> HttpResponse:
+    return render(request, 'cadastro.html')
+
+
+def submit_usuario(request) -> HttpResponse:
+    if not request.POST:
+        return redirect('/')
+    try:
+        nome = request.POST.get('nome')
+        senha = request.POST.get('senha')
+        email = request.POST.get('email')
+        User.objects.create_user(nome, email, senha)
+        messages.success(request, "Usuário cadastrado com sucesso!")
+        return redirect('/cadastro')
+    except:
+        messages.error(request, "Usuário ou senha inválido!")
+        return redirect('/cadastro')
