@@ -1,9 +1,5 @@
 {% extends "_layouts/model_page.html" %}
-
 {% block content %}
-{% for message in messages %}
-    {{ message | safe }}
-{% endfor %}
 <br>
 <form class="col-sm-5" action="submit" method="POST">{% csrf_token %}
     <!-- @TODO modificar os campos para conter nome de usuário, email e senha -->

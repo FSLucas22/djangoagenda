@@ -1,12 +1,5 @@
 {% extends "_layouts/model_page.html" %}
-
 {% block content %}
-{% for message in messages %}
-    <div style="color: red;">
-        <strong>Erro:&nbsp</strong>{{ message }}
-    </div>
-{% endfor %}
-<br>
 <div class="col-sm-5">
     <form action="submit" method="POST">{% csrf_token %}
         <div class="mb-3 form-group row d-flex "></div>
