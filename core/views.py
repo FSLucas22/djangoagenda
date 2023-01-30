@@ -1,13 +1,16 @@
 from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password
+from django.core.validators import validate_email, validate_slug
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.http.response import Http404, JsonResponse
-from datetime import datetime, timedelta
+from django.core import validators
 from django.db.utils import IntegrityError
+from datetime import datetime, timedelta
 from . import models
 
 # Create your views here.
@@ -162,12 +165,31 @@ def submit_usuario(request) -> HttpResponse:
         nome = request.POST.get('nome')
         senha = request.POST.get('senha')
         email = request.POST.get('email')
+
+        validate_slug(nome)
+        validate_email(email)
+        validate_password(senha, nome)
+
+        if User.objects.filter(username=nome).exists():
+            messages.error(request, "O nome de usuário já existe."
+            " Caso já possua uma conta, tente <a href='/login'>fazer login</a>."
+            )
+            return redirect('/cadastro')
+
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Este email já está cadastrado. "
+                                    " Caso já possua uma conta, tente <a href='/login'>fazer login</a>.")
+            return redirect('/cadastro')
+
         User.objects.create_user(nome, email, senha)
         messages.success(request, "Usuário cadastrado com sucesso!")
         return redirect('/cadastro')
     except IntegrityError as e:
-        if str(e) == "UNIQUE constraint failed: auth_user.username":
-            messages.error(request, "O nome de usuário já existe."
-            " Caso já possua uma conta, tente <a href='/login'>fazer login</a>"
-            )
+        print(e)
+        messages.error(request, "Algo deu errado. Por favor tente novamente.")
+        return redirect('/cadastro')
+
+    except ValidationError as e:
+        for message in e.messages:
+            messages.error(request, message)
         return redirect('/cadastro')
