@@ -18,7 +18,7 @@ from . import models
 
 # def index(request) -> HttpResponse:
 #     return redirect('/agenda/')
-
+from .app_validation import validate_username
 
 requires_login = login_required(login_url="/login/")
 
@@ -166,7 +166,7 @@ def submit_usuario(request) -> HttpResponse:
         senha = request.POST.get('senha')
         email = request.POST.get('email')
 
-        validate_slug(nome)
+        validate_username(nome)
         validate_email(email)
         validate_password(senha, nome)
 
@@ -184,6 +184,7 @@ def submit_usuario(request) -> HttpResponse:
         User.objects.create_user(nome, email, senha)
         messages.success(request, "Usuário cadastrado com sucesso!")
         return redirect('/cadastro')
+
     except IntegrityError as e:
         print(e)
         messages.error(request, "Algo deu errado. Por favor tente novamente.")
