@@ -1,24 +1,23 @@
+from datetime import datetime, timedelta
+
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
-from django.core.validators import validate_email, validate_slug
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout
-from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.http.response import Http404, JsonResponse
-from django.core import validators
+from django.core.validators import validate_email
 from django.db.utils import IntegrityError
-from datetime import datetime, timedelta
+from django.http import HttpResponse
+from django.http.response import Http404, JsonResponse
+from django.shortcuts import render, redirect
+
 from . import models
 
-# Create your views here.
-
-
-# def index(request) -> HttpResponse:
-#     return redirect('/agenda/')
 from .app_validation import validate_username
+from .decorators import user_not_authenticated
+
+# Create your views here.
 
 requires_login = login_required(login_url="/login/")
 
@@ -154,10 +153,12 @@ def json_lista_eventos(request, id_usuario: int) -> HttpResponse:
     return JsonResponse(list(eventos), safe=False)
 
 
+@user_not_authenticated
 def cadastro_usuario(request) -> HttpResponse:
     return render(request, 'cadastro.html')
 
 
+@user_not_authenticated
 def submit_usuario(request) -> HttpResponse:
     if not request.POST:
         return redirect('/')
