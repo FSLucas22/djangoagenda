@@ -2,10 +2,10 @@
 
 {% block content %}
 {% for message in messages %}
-    <strong>:&nbsp</strong>{{ message }}
+    {{ message | safe }}
 {% endfor %}
 <br>
-<form action="submit" method="POST">{% csrf_token %}
+<form class="col-sm-5" action="submit" method="POST">{% csrf_token %}
     <!-- @TODO modificar os campos para conter nome de usuário, email e senha -->
     <div class="mb-3 form-group row d-flex "></div>
     <div class="mb-3 form-group row d-flex ">
@@ -14,23 +14,28 @@
         <p> Já possui uma conta? Faça <a href="/login">login</a>.</p>
     </div>
     <div class="mb-3 form-group row">
-        <div class="col-sm-5 form-floating">
-            <input required type="text" class="form-control" name="username"
-                   id="username" placeholder="Nome de usuário">
-            <label for="username" class="col-sm-2 col-form-label">Nome de usuário</label>
+        <div class="form-floating">
+            <input required type="text" class="form-control" name="nome"
+                   id="nome" placeholder="Nome de usuário">
+            <label for="nome" class="col-sm-2 col-form-label">Nome de usuário</label>
         </div>
     </div>
     <div class="mb-3 form-group row">
-        <div class="col-sm-5  form-floating">
+        <div class="form-floating">
+            <input required type="email" class="form-control" name="email"
+                   id="email" placeholder="example@example.com">
+            <label for="email" class="col-sm-2 col-form-label">Email</label>
+        </div>
+    </div>
+    <div class="mb-3 form-group row">
+        <div class="form-floating">
             <input required
                    type="password" class="form-control" id="password" name="password" placeholder="Senha">
             <label for="password" class="col-sm-2 col-form-label">Senha</label>
         </div>
     </div>
-    <div class="mb-3 form-group row">
-        <div class="col-sm-5">
-            <button type="submit" class="btn btn-primary">Entrar</button>
-        </div>
+    <div class="mb-3 form-group">
+        <button type="submit" class="btn btn-primary float-end">Finalizar Cadastro</button>
     </div>
 </form>
 {% endblock %}

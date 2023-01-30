@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import Http404, JsonResponse
 from datetime import datetime, timedelta
-
+from django.db.utils import IntegrityError
 from . import models
 
 # Create your views here.
@@ -165,6 +165,9 @@ def submit_usuario(request) -> HttpResponse:
         User.objects.create_user(nome, email, senha)
         messages.success(request, "Usuário cadastrado com sucesso!")
         return redirect('/cadastro')
-    except:
-        messages.error(request, "Usuário ou senha inválido!")
+    except IntegrityError as e:
+        if str(e) == "UNIQUE constraint failed: auth_user.username":
+            messages.error(request, "O nome de usuário já existe."
+            " Caso já possua uma conta, tente <a href='/login'>fazer login</a>"
+            )
         return redirect('/cadastro')
