@@ -174,4 +174,8 @@ def submit_usuario(request) -> HttpResponse:
     else:
         for error in list(form.errors.values()):
             messages.error(request, error)
-        return redirect('/cadastro')
+        dados = {
+            "username": request.POST.get('username'),
+            "email": request.POST.get('email')
+        }
+        return render(request, 'cadastro.html', dados)

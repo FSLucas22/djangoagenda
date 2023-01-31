@@ -11,14 +11,22 @@
     <div class="mb-3 form-group row">
         <div class="form-floating">
             <input required type="text" class="form-control" name="username"
-                   id="username" placeholder="Nome de usuário">
+                   id="username" placeholder="Nome de usuário"
+                   {% if username is not None %}
+                        value="{{ username }}"
+                   {% endif %}
+            >
             <label for="username" class="col-sm-2 col-form-label">Nome de usuário</label>
         </div>
     </div>
     <div class="mb-3 form-group row">
         <div class="form-floating">
             <input required type="email" class="form-control" name="email"
-                   id="email" placeholder="example@example.com">
+                   id="email" placeholder="example@example.com"
+                   {% if email is not None %}
+                        value="{{ email }}"
+                   {% endif %}
+            >
             <label for="email" class="col-sm-2 col-form-label">Email</label>
         </div>
     </div>
