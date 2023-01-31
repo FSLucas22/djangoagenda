@@ -1,30 +1,29 @@
 {% extends '_layouts/model_page.html' %}
 {% block title %}Login{% endblock %}
 {% block content %}
-<form action="submit" method="POST">{% csrf_token %}
+<form action="submit" method="POST" class="col-sm-5">{% csrf_token %}
     <div class="mb-3 form-group row d-flex "></div>
     <div class="mb-3 form-group row d-flex ">
         <h3>Login</h3>
         <p> Digite seu nome de usuário e senha </p>
+        <p> Não possui uma conta? Faça seu <a href="/cadastro">cadastro</a>. É rapido!</p>
     </div>
-    <div class="mb-3 form-group row">
-        <div class="col-sm-5 form-floating">
+    <div class="mb-3 form-group">
+        <div class="form-floating">
             <input required type="text" class="form-control" name="username"
                    id="username" placeholder="Nome de usuário">
             <label for="username" class="col-sm-2 col-form-label">Nome de usuário</label>
         </div>
     </div>
-    <div class="mb-3 form-group row">
-        <div class="col-sm-5  form-floating">
+    <div class="mb-3 form-group">
+        <div class="form-floating">
             <input required
                    type="password" class="form-control" id="password" name="password" placeholder="Senha">
             <label for="password" class="col-sm-2 col-form-label">Senha</label>
         </div>
     </div>
-    <div class="mb-3 form-group row">
-        <div class="col-sm-5">
-            <button type="submit" class="btn btn-primary">Entrar</button>
-        </div>
+    <div class="mb-3 form-group">
+            <button type="submit" class="btn btn-primary float-end">Entrar</button>
     </div>
 </form>
 {% endblock %}
