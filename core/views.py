@@ -4,18 +4,13 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.core.validators import validate_email
-from django.db.utils import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.http.response import Http404, JsonResponse
 from django.shortcuts import render, redirect
 
 from . import models
 from .app_forms import UserRegistrationForm
-
-from .app_validation import validate_username
 from .decorators import user_not_authenticated
 
 # Create your views here.
