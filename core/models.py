@@ -7,9 +7,10 @@ from core.regras import TipoRepeticao
 
 
 class RegraRepeticao(models.Model):
-    vezes = models.IntegerField(blank=True, null=True)
     tipo_regra = models.IntegerField(choices=TipoRepeticao.choices)
     # @TODO colocar os parâmetros das regras como fields
+    vezes = models.IntegerField(blank=True, null=True)
+    data_hora = models.DateTimeField(blank=True, null=True)
 
 
 # Cria uma tabela com nome core_evento
@@ -20,7 +21,7 @@ class Evento(models.Model):
     data_evento = models.DateTimeField(verbose_name='Data do Evento')
     data_criacao = models.DateTimeField(auto_now=True, verbose_name='Data de Criação')
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    #regra_repeticao = models.ForeignKey(RegraRepeticao, null=True, on_delete=models.SET_NULL)
+    #regra_repeticao = models.ForeignKey(RegraRepeticao, blank=True, null=True, on_delete=models.SET_NULL)
 
 
     def __str__(self) -> models.CharField:

@@ -5,6 +5,7 @@ class TipoRepeticao(IntEnum):
     TODO_DIA = auto()
     TODA_SEMANA = auto()
     TODO_ANO = auto()
+    TODO_DIA_DE_SEMANA = auto()
     A_CADA_PERIODO = auto()
 
     @classmethod
