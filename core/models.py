@@ -2,7 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from datetime import datetime, timedelta
+from core.regras import TipoRepeticao
 # Create your models here.
+
+
+class RegraRepeticao(models.Model):
+    vezes = models.IntegerField(blank=True, null=True)
+    tipo_regra = models.IntegerField(choices=TipoRepeticao.choices)
+    # @TODO colocar os parâmetros das regras como fields
 
 
 # Cria uma tabela com nome core_evento
@@ -13,12 +20,8 @@ class Evento(models.Model):
     data_evento = models.DateTimeField(verbose_name='Data do Evento')
     data_criacao = models.DateTimeField(auto_now=True, verbose_name='Data de Criação')
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    #regra_repeticao = models.ForeignKey(RegraRepeticao, null=True, on_delete=models.SET_NULL)
 
-    # objects = models.Manager()
-
-    # Para que o nome da tabela seja "evento" e não "core_evento":
-    # class Meta:
-    #   db_table = "evento"
 
     def __str__(self) -> models.CharField:
         return self.titulo
@@ -38,3 +41,5 @@ class Evento(models.Model):
         delta = self.data_evento - data_atual
         minutes = delta.total_seconds() / 60
         return minutes
+
+
