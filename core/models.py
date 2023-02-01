@@ -3,7 +3,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import models
 
-from core.regras import TipoRepeticao, PARA_SEMPRE
+from rules.constants import TipoRepeticao, PARA_SEMPRE
 
 
 # Create your models here.
