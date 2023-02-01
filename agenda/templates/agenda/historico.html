@@ -5,10 +5,12 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Histórico de Eventos</h5>
-            <a href="/">
-                <button type="button" class="btn btn-primary">Eventos atuais</button>
-            </a>
+            <div class="d-flex flex-row align-items-baseline justify-content-between">
+                <h5 class="card-title">Histórico de Eventos</h5>>
+                <a href="{% url 'lista_eventos' %}">
+                    <button type="button" class="btn btn-primary">Eventos atuais</button>
+                </a>
+            </div>
             {% if eventos|length > 0 %}
                 <p class="card-text">
                     Aqui está o histórico de Eventos expirados.
@@ -58,7 +60,7 @@
                 </table>
             {% else %}
                 <div class="text-center mt-5 mb-5 jumbotron">
-                    <h5>Nenhum <code>Evento</code> cadastrado ainda.</h5>
+                    <h5>Nenhum Evento cadastrado ainda.</h5>
                 </div>
             {% endif %}
             <hr />

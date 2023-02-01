@@ -65,7 +65,8 @@
           </div>
         {% endif %}
           <hr />
-          <div class="text-right">
+          <div class="text-right d-flex justify-content-end">
+            <a href="{% url 'historico_eventos' %}" class="btn btn-secondary me-1">Eventos Passados</a>
             <a href="{% url 'evento' %}" class="btn btn-primary">
               Novo Evento
             </a>
