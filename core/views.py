@@ -32,10 +32,7 @@ def submit_login(request) -> HttpResponse:
         return redirect('/')
 
     username = request.POST.get('username')
-    print(username)
     password = request.POST.get('password')
-    print(request.POST.get)
-    print(password)
     usuario = authenticate(username=username, password=password)
     if not usuario:
         messages.error(request, "Usuário ou senha inválido!")
