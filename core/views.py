@@ -22,6 +22,7 @@ def login_user(request) -> HttpResponse:
     return render(request, 'login.html')
 
 
+@requires_login
 def logout_user(request) -> HttpResponse:
     logout(request)
     return redirect('/')
