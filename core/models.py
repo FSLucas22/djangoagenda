@@ -3,7 +3,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import models
 
-from rules.constants import TipoRepeticao, PARA_SEMPRE
+from core.rules.constants import TipoRepeticao, PARA_SEMPRE
 
 
 # Create your models here.
@@ -13,6 +13,8 @@ class RegraRepeticao(models.Model):
     tipo_regra = models.IntegerField(choices=TipoRepeticao.choices)
     vezes = models.IntegerField(default=PARA_SEMPRE)
     periodo = models.DateTimeField(blank=True, null=True)
+    flag_fevereiro_29 = models.BooleanField(default=False)
+    flag_ir_para_marco = models.BooleanField(default=False)
 
 
 # Cria uma tabela com nome core_evento
