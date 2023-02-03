@@ -2,3 +2,9 @@ body {
     margin-left: 10px;
     margin-right: 20px;
 }
+
+.btn {
+   border-stile: solid;
+   border-width: 1px;
+   border-color: #5b5959 !important;
+}
