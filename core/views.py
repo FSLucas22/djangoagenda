@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from django import urls
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -9,7 +10,7 @@ from django.http import HttpResponse
 from django.http.response import Http404, JsonResponse
 from django.shortcuts import render, redirect
 
-from . import models
+from . import models, factories
 from .app_forms import UserRegistrationForm
 from .decorators import user_not_authenticated
 
@@ -19,28 +20,28 @@ requires_login = login_required(login_url="/login/")
 
 
 def login_user(request) -> HttpResponse:
-    return render(request, 'login.html')
+    return render(request, urls.reverse('login'))
 
 
 @requires_login
 def logout_user(request) -> HttpResponse:
     logout(request)
-    return redirect('/')
+    return redirect(urls.reverse('index'))
 
 
 def submit_login(request) -> HttpResponse:
     if not request.POST:
-        return redirect('/')
+        return redirect(urls.reverse('index'))
 
     username = request.POST.get('username')
     password = request.POST.get('password')
     usuario = authenticate(username=username, password=password)
     if not usuario:
         messages.error(request, "Usuário ou senha inválido!")
-        return redirect('/')
+        return redirect(urls.reverse('index'))
 
     login(request, usuario)
-    return redirect('/')
+    return redirect(urls.reverse('index'))
 
 
 def get_local(request, titulo_evento: str) -> HttpResponse:
@@ -86,7 +87,7 @@ def evento(request) -> HttpResponse:
 @requires_login
 def submit_evento(request) -> HttpResponse:
     if not request.POST:
-        return redirect('/')
+        return redirect(urls.reverse('index'))
 
     evento_id = request.POST.get('id')
     titulo = request.POST.get('titulo')
@@ -96,13 +97,7 @@ def submit_evento(request) -> HttpResponse:
 
     usuario = request.user
     if not evento_id:
-        models.Evento.objects.create(
-            titulo=titulo,
-            descricao=descricao,
-            data_evento=data_evento,
-            local=local_evento,
-            usuario=usuario
-        )
+        factories.criar_evento(request)
     else:
         try:
             evento = models.Evento.objects.get(id=evento_id)
@@ -115,7 +110,7 @@ def submit_evento(request) -> HttpResponse:
         evento.data_evento = data_evento
         evento.local = local_evento
         evento.save()
-    return redirect('/')
+    return redirect(urls.reverse('lista_eventos'))
 
 
 @requires_login
@@ -126,7 +121,7 @@ def delete_evento(request, id_evento: int) -> HttpResponse:
         if evento.usuario != usuario:
             raise Http404()
         evento.delete()
-        return redirect('/')
+        return redirect(request.META.get('HTTP_REFERER', '/'))
     except ObjectDoesNotExist:
         raise Http404()
 
@@ -155,14 +150,14 @@ def cadastro_usuario(request) -> HttpResponse:
 @user_not_authenticated
 def submit_usuario(request) -> HttpResponse:
     if not request.POST:
-        return redirect('/')
+        return redirect(urls.reverse('index'))
 
     form = UserRegistrationForm(request.POST)
     if form.is_valid():
         usuario = form.save()
         login(request, usuario)
         messages.success(request, "Usuário cadastrado com sucesso!")
-        return redirect('/')
+        return redirect(urls.reverse('index'))
 
     else:
         for error in list(form.errors.values()):

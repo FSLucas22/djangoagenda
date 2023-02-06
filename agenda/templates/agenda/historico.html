@@ -6,7 +6,7 @@
     <div class="card">
         <div class="card-body">
             <div class="d-flex flex-row align-items-baseline justify-content-between">
-                <h5 class="card-title">Histórico de Eventos</h5>>
+                <h5 class="card-title">Histórico de Eventos</h5>
                 <a href="{% url 'lista_eventos' %}">
                     <button type="button" class="btn btn-primary">Eventos atuais</button>
                 </a>
@@ -49,7 +49,7 @@
                                    class="btn btn-info">
                                     Editar
                                 </a>
-                                <a href="evento/delete/{{ evento.id }}/"
+                                <a href="{% url 'delete_evento' id_evento=evento.id %}"
                                    class="btn btn-outline-danger">
                                     Excluir
                                 </a>
