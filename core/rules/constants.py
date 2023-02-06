@@ -5,6 +5,7 @@ PARA_SEMPRE = -1
 
 
 class TipoRepeticao(IntEnum):
+    TODA_HORA = auto()
     TODO_DIA = auto()
     TODA_SEMANA = auto()
     TODO_MES = auto()

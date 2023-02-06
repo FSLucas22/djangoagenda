@@ -6,6 +6,10 @@ def a_cada_periodo(data_evento: datetime, periodo: timedelta, *args) -> datetime
     return data_evento + periodo
 
 
+def toda_hora(data_evento: datetime, *args) -> datetime:
+    return a_cada_periodo(data_evento, timedelta(hours=1))
+
+
 def todo_dia(data_evento: datetime, *args) -> datetime:
     return a_cada_periodo(data_evento, timedelta(days=1))
 
