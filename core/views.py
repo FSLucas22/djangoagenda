@@ -20,7 +20,7 @@ requires_login = login_required(login_url="/login/")
 
 
 def login_user(request) -> HttpResponse:
-    return render(request, urls.reverse('login'))
+    return render(request, 'login.html')
 
 
 @requires_login
